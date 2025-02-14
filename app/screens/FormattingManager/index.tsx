@@ -22,10 +22,10 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native'
 import Markdown from 'react-native-markdown-display'
 
 const autoformatterData = [
-    { label: 'Disabled', example: '*<No Formatting>*' },
-    { label: 'Plain Action, Quote Speech', example: 'Some action, "Some speech"' },
-    { label: 'Asterisk Action, Plain Speech', example: '*Some action* Some speech' },
-    { label: 'Asterisk Action, Quote Speech', example: '*Some action* "Some speech"' },
+    { label: '禁用', example: '*<无格式化>*' },
+    { label: '普通动作，引用对话', example: 'Some action, "Some speech"' },
+    { label: '星号动作，普通对话', example: '*Some action* Some speech' },
+    { label: '星号动作，引用对话', example: '*Some action* "Some speech"' },
 ]
 
 const FormattingManager = () => {
@@ -51,12 +51,12 @@ const FormattingManager = () => {
 
     const handleRegenerateDefaults = () => {
         Alert.alert({
-            title: `Regenerate Default Instructs`,
-            description: `Are you sure you want to regenerate default Instructs'?`,
+            title: `重置默认指令`,
+            description: `您确定要重置默认指令吗？`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Regenerate Default Presets',
+                    label: '重置默认预设',
                     onPress: async () => {
                         await Instructs.generateInitialDefaults()
                     },
@@ -67,29 +67,29 @@ const FormattingManager = () => {
 
     const handleExportPreset = async () => {
         if (!instructID) return
-        const name = (currentInstruct?.name ?? 'Default') + '.json'
+        const name = (currentInstruct?.name ?? '默认') + '.json'
         await saveStringToDownload(JSON.stringify(currentInstruct), name, 'utf8')
-        Logger.infoToast(`Saved "${name}" to Downloads`)
+        Logger.infoToast(`已保存 "${name}" 到下载目录`)
     }
 
     const handleDeletePreset = () => {
         if (instructList.length === 1) {
-            Logger.warnToast(`Cannot delete last Instruct preset.`)
+            Logger.warnToast(`无法删除最后一个指令预设。`)
             return
         }
 
         Alert.alert({
-            title: `Delete Preset`,
-            description: `Are you sure you want to delete '${currentInstruct?.name}'?`,
+            title: `删除预设`,
+            description: `您确定要删除 '${currentInstruct?.name}' 吗？`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Instruct',
+                    label: '删除指令',
                     onPress: async () => {
                         if (!instructID) return
                         const leftover = data.filter((item) => item.id !== instructID)
                         if (leftover.length === 0) {
-                            Logger.warnToast('Cannot delete last instruct')
+                            Logger.warnToast('无法删除最后一个指令')
                             return
                         }
                         Instructs.db.mutate.deleteInstruct(instructID)
@@ -108,7 +108,7 @@ const FormattingManager = () => {
             placement="bottom"
             options={[
                 {
-                    label: 'Create Preset',
+                    label: '创建预设',
                     icon: 'addfile',
                     onPress: (menu) => {
                         setShowNewInstruct(true)
@@ -117,7 +117,7 @@ const FormattingManager = () => {
                     },
                 },
                 {
-                    label: 'Export Preset',
+                    label: '导出预设',
                     icon: 'download',
                     onPress: (menu) => {
                         handleExportPreset()
@@ -125,7 +125,7 @@ const FormattingManager = () => {
                     },
                 },
                 {
-                    label: 'Delete Preset',
+                    label: '删除预设',
                     icon: 'delete',
                     onPress: (menu) => {
                         handleDeletePreset()
@@ -134,7 +134,7 @@ const FormattingManager = () => {
                     warning: true,
                 },
                 {
-                    label: 'Regenerate Default',
+                    label: '重置默认',
                     icon: 'reload1',
                     onPress: (menu) => {
                         handleRegenerateDefaults()
@@ -155,13 +155,13 @@ const FormattingManager = () => {
                         marginVertical: spacing.xl,
                         flex: 1,
                     }}>
-                    <HeaderTitle title="Formatting" />
+                    <HeaderTitle title="格式化" />
                     <HeaderButton headerRight={headerRight} />
                     <TextBoxModal
                         booleans={[showNewInstruct, setShowNewInstruct]}
                         onConfirm={(text) => {
                             if (instructList.some((item) => item.name === text)) {
-                                Logger.warnToast(`Preset name already exists.`)
+                                Logger.warnToast(`预设名称已存在。`)
                                 return
                             }
                             if (!currentInstruct) return
@@ -169,7 +169,7 @@ const FormattingManager = () => {
                             Instructs.db.mutate
                                 .createInstruct({ ...currentInstruct, name: text })
                                 .then(async (newid) => {
-                                    Logger.infoToast(`Preset created.`)
+                                    Logger.infoToast(`预设已创建。`)
                                     await loadInstruct(newid)
                                 })
                         }}
@@ -192,7 +192,7 @@ const FormattingManager = () => {
                                 if (item.id === instructID) return
                                 loadInstruct(item.id)
                             }}
-                            modalTitle="Select Preset"
+                            modalTitle="选择预设"
                             search
                         />
                         <ThemedButton iconName="save" iconSize={28} variant="tertiary" />
@@ -208,9 +208,9 @@ const FormattingManager = () => {
                             rowGap: spacing.xl,
                             paddingHorizontal: spacing.xl,
                         }}>
-                        <SectionTitle>Instruct Formatting</SectionTitle>
+                        <SectionTitle>指令格式化</SectionTitle>
                         <ThemedTextInput
-                            label="System Sequence"
+                            label="系统序列"
                             value={currentInstruct.system_prompt}
                             onChangeText={(text) => {
                                 setCurrentInstruct({
@@ -223,7 +223,7 @@ const FormattingManager = () => {
                         />
                         <View style={{ flexDirection: 'row', columnGap: spacing.m }}>
                             <ThemedTextInput
-                                label="System Prefix"
+                                label="系统前缀"
                                 value={currentInstruct.system_prefix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -235,7 +235,7 @@ const FormattingManager = () => {
                                 multiline
                             />
                             <ThemedTextInput
-                                label="System Suffix"
+                                label="系统后缀"
                                 value={currentInstruct.system_suffix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -249,7 +249,7 @@ const FormattingManager = () => {
                         </View>
                         <View style={{ flexDirection: 'row', columnGap: spacing.m }}>
                             <ThemedTextInput
-                                label="Input Prefix"
+                                label="输入前缀"
                                 value={currentInstruct.input_prefix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -261,7 +261,7 @@ const FormattingManager = () => {
                                 multiline
                             />
                             <ThemedTextInput
-                                label="Input Suffix"
+                                label="输入后缀"
                                 value={currentInstruct.input_suffix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -275,7 +275,7 @@ const FormattingManager = () => {
                         </View>
                         <View style={{ flexDirection: 'row', columnGap: spacing.m }}>
                             <ThemedTextInput
-                                label="Output Prefix"
+                                label="输出前缀"
                                 value={currentInstruct.output_prefix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -287,7 +287,7 @@ const FormattingManager = () => {
                                 multiline
                             />
                             <ThemedTextInput
-                                label="Output Suffix"
+                                label="输出后缀"
                                 value={currentInstruct.output_suffix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -302,7 +302,7 @@ const FormattingManager = () => {
 
                         <View style={{ flexDirection: 'row' }}>
                             <ThemedTextInput
-                                label="Last Output Prefix"
+                                label="最后输出前缀"
                                 value={currentInstruct.last_output_prefix}
                                 onChangeText={(text) => {
                                     setCurrentInstruct({
@@ -317,7 +317,7 @@ const FormattingManager = () => {
 
                         <StringArrayEditor
                             containerStyle={{ marginBottom: spacing.l }}
-                            title="Stop Sequence"
+                            title="停止序列"
                             value={
                                 currentInstruct.stop_sequence
                                     ? currentInstruct.stop_sequence.split(',')
@@ -332,7 +332,7 @@ const FormattingManager = () => {
                             replaceNewLine="\n"
                         />
 
-                        <SectionTitle>Macros & Character Card</SectionTitle>
+                        <SectionTitle>宏和角色卡</SectionTitle>
 
                         <View
                             style={{
@@ -342,7 +342,7 @@ const FormattingManager = () => {
                             }}>
                             <View>
                                 <ThemedCheckbox
-                                    label="Wrap In Newline"
+                                    label="换行包裹"
                                     value={currentInstruct.wrap}
                                     onChangeValue={(b) => {
                                         setCurrentInstruct({
@@ -352,7 +352,7 @@ const FormattingManager = () => {
                                     }}
                                 />
                                 <ThemedCheckbox
-                                    label="Include Names"
+                                    label="包含名称"
                                     value={currentInstruct.names}
                                     onChangeValue={(b) => {
                                         setCurrentInstruct({
@@ -362,7 +362,7 @@ const FormattingManager = () => {
                                     }}
                                 />
                                 <ThemedCheckbox
-                                    label="Add Timestamp"
+                                    label="添加时间戳"
                                     value={currentInstruct.timestamp}
                                     onChangeValue={(b) => {
                                         setCurrentInstruct({
@@ -374,7 +374,7 @@ const FormattingManager = () => {
                             </View>
                             <View>
                                 <ThemedCheckbox
-                                    label="Use Examples"
+                                    label="使用示例"
                                     value={currentInstruct.examples}
                                     onChangeValue={(b) => {
                                         setCurrentInstruct({
@@ -384,7 +384,7 @@ const FormattingManager = () => {
                                     }}
                                 />
                                 <ThemedCheckbox
-                                    label="Use Scenario"
+                                    label="使用场景"
                                     value={currentInstruct.scenario}
                                     onChangeValue={(b) => {
                                         setCurrentInstruct({
@@ -395,7 +395,7 @@ const FormattingManager = () => {
                                 />
 
                                 <ThemedCheckbox
-                                    label="Use Personality"
+                                    label="使用个性"
                                     value={currentInstruct.personality}
                                     onChangeValue={(b) => {
                                         setCurrentInstruct({
@@ -408,12 +408,12 @@ const FormattingManager = () => {
                         </View>
 
                         <View style={{ rowGap: 8 }}>
-                            <SectionTitle>Text Formatter</SectionTitle>
+                            <SectionTitle>文本格式化器</SectionTitle>
                             <Text
                                 style={{
                                     color: color.text._400,
                                 }}>
-                                Automatically formats first message to the style below:
+                                自动将第一条消息格式化为以下样式：
                             </Text>
                             <View
                                 style={{
@@ -447,40 +447,6 @@ const FormattingManager = () => {
                                 ))}
                             </View>
                         </View>
-
-                        {/* @TODO: Macros are always replaced - people may want this to be changed
-                            <CheckboxTitle
-                                name="Replace Macro In Sequences"
-                                varname="macro"
-                                body={currentInstruct}
-                                setValue={setCurrentInstruct}
-                            />
-                            */}
-
-                        {/*  Groups are not implemented - leftover from ST
-                            <CheckboxTitle
-                                name="Force for Groups and Personas"
-                                varname="names_force_groups"
-                                body={currentInstruct}
-                                setValue={setCurrentInstruct}
-                            />
-                            */}
-                        {/* Activates Instruct when model is loaded with specific name that matches regex
-                    
-                            <TextBox
-                                name="Activation Regex"
-                                varname="activation_regex"
-                                body={currentInstruct}
-                                setValue={setCurrentInstruct}
-                            />*/}
-                        {/*    User Alignment Messages may be needed in future, might be removed on CCv3
-                            <TextBox
-                                name="User Alignment"
-                                varname="user_alignment_message"
-                                body={currentInstruct}
-                                setValue={setCurrentInstruct}
-                                multiline
-                            />*/}
                     </ScrollView>
                 </SafeAreaView>
             </FadeDownView>
