@@ -1,5 +1,5 @@
 import ThemedButton from '@components/buttons/ThemedButton'
-import FadeBackrop from '@components/views/FadeBackdrop'
+import FadeBackdrop from '@components/views/FadeBackdrop'
 import { Chats } from '@lib/state/Chat'
 import { Theme } from '@lib/theme/ThemeManager'
 import React, { useEffect, useState } from 'react'
@@ -82,7 +82,7 @@ const EditorModal = () => {
                 onShow={handleAutoFocus}
                 onRequestClose={handleClose}
                 style={{ flex: 1 }}>
-                <FadeBackrop handleOverlayClick={handleOverlayClick} />
+                <FadeBackdrop handleOverlayClick={handleOverlayClick} />
                 <View style={{ flex: 1 }} />
                 <Animated.View exiting={SlideOutDown.duration(100)} style={styles.editorContainer}>
                     <View style={styles.topText}>
@@ -105,13 +105,13 @@ const EditorModal = () => {
                             justifyContent: 'space-between',
                         }}>
                         <ThemedButton
-                            label="Delete"
+                            label="删除"
                             iconName="delete"
                             onPress={handleDeleteMessage}
                             variant="critical"
                         />
                         <ThemedButton
-                            label="Confirm"
+                            label="确认"
                             iconName="check"
                             onPress={handleEditMessage}
                             variant="secondary"
