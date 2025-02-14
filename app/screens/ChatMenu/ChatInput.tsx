@@ -34,7 +34,7 @@ const ChatInput = () => {
     const [newMessage, setNewMessage] = useState<string>('')
 
     const abortResponse = async () => {
-        Logger.info(`Aborting Generation`)
+        Logger.info(`正在中止生成`)
         if (abortFunction) await abortFunction()
     }
 
@@ -59,7 +59,7 @@ const ChatInput = () => {
                     paddingVertical: spacing.m,
                     marginHorizontal: spacing.m,
                 }}
-                placeholder="Message..."
+                placeholder="消息..."
                 placeholderTextColor={color.text._700}
                 value={newMessage}
                 onChangeText={(text) => setNewMessage(text)}
