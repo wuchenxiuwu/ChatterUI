@@ -13,7 +13,7 @@ const AppModeToggle = () => {
 
     return (
         <View style={styles.modeContainer}>
-            <Text style={styles.appModeText}>App Mode</Text>
+            <Text style={styles.appModeText}>应用模式</Text>
             <View style={styles.modeButtonContainer}>
                 <TouchableOpacity
                     onPress={() => setAppMode(AppMode.LOCAL)}
@@ -23,7 +23,7 @@ const AppModeToggle = () => {
                         color={localMode ? color.text._100 : color.text._500}
                         size={18}
                     />
-                    <Text style={localMode ? styles.modeText : styles.modeTextInactive}>Local</Text>
+                    <Text style={localMode ? styles.modeText : styles.modeTextInactive}>本地</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => setAppMode(AppMode.REMOTE)}
@@ -34,7 +34,7 @@ const AppModeToggle = () => {
                         size={18}
                     />
                     <Text style={remoteMode ? styles.modeText : styles.modeTextInactive}>
-                        Remote
+                        远程
                     </Text>
                 </TouchableOpacity>
             </View>
