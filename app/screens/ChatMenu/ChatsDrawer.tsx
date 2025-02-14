@@ -59,10 +59,10 @@ const ChatsDrawer: React.FC<ChatsDrawerProps> = ({ booleans: [showModal, setShow
                             alignItems: 'center',
                             marginTop: spacing.xl,
                         }}>
-                        <Ionicons name="chatbox" size={20} color={color.text._400} />
-                        <Text style={styles.smallTextChat}>{item.entryCount}</Text>
-                        <Text style={styles.smallText}>{date.toLocaleDateString()}</Text>
-                        <Text style={styles.smallText}>{date.toLocaleTimeString()}</Text>
+                    <Ionicons name="chatbox" size={20} color={color.text._400} />
+                    <Text style={styles.smallTextChat}>{item.entryCount}</Text>
+                    <Text style={styles.smallText}>{date.toLocaleDateString()}</Text>
+                    <Text style={styles.smallText}>{date.toLocaleTimeString()}</Text>
                     </View>
                 </TouchableOpacity>
                 <ChatEditPopup item={item} nowLoading={nowLoading} setNowLoading={setNowLoading} />
@@ -72,7 +72,7 @@ const ChatsDrawer: React.FC<ChatsDrawerProps> = ({ booleans: [showModal, setShow
 
     return (
         <Drawer setShowDrawer={setShowModal} drawerStyle={styles.drawer} direction="right">
-            <Text style={styles.drawerTitle}>Chats</Text>
+            <Text style={styles.drawerTitle}>聊天记录</Text>
             <FlatList
                 style={styles.listContainer}
                 data={data}
@@ -81,7 +81,7 @@ const ChatsDrawer: React.FC<ChatsDrawerProps> = ({ booleans: [showModal, setShow
                 showsVerticalScrollIndicator={false}
                 removeClippedSubviews={false}
             />
-            <ThemedButton label="New Chat" onPress={handleCreateChat} />
+            <ThemedButton label="新建聊天" onPress={handleCreateChat} />
         </Drawer>
     )
 }
