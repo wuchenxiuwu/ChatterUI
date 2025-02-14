@@ -25,7 +25,7 @@ const TTSMenu = () => {
     const [lang, setLang] = useState(currentSpeaker?.language ?? 'en-US')
     const [modelList, setModelList] = useState<Speech.Voice[]>([])
     const languageList: LanguageListItem = groupBy(modelList, 'language')
-    const [testAudioText, setTestAudioText] = useState('This is a test audio')
+    const [testAudioText, setTestAudioText] = useState('这是一个测试音频')
 
     const languages = Object.keys(languageList)
         .sort()
@@ -50,12 +50,12 @@ const TTSMenu = () => {
                 paddingHorizontal: 16,
                 rowGap: 8,
             }}>
-            <HeaderTitle title="TTS" />
+            <HeaderTitle title="文本转语音" />
 
-            <SectionTitle>Settings</SectionTitle>
+            <SectionTitle>设置</SectionTitle>
 
             <ThemedSwitch
-                label="Enable"
+                label="启用"
                 value={enableTTS}
                 onChangeValue={(value) => {
                     if (value) {
@@ -68,11 +68,11 @@ const TTSMenu = () => {
             <ThemedSwitch
                 value={autoTTS}
                 onChangeValue={setAutoTTS}
-                label="Automatically TTS On Inference"
+                label="推理时自动启用 TTS"
             />
 
             <SectionTitle style={{ marginTop: 8 }}>
-                Language ({Object.keys(languageList).length})
+                语言 ({Object.keys(languageList).length})
             </SectionTitle>
             <View style={{ marginTop: 8 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 8 }}>
@@ -81,7 +81,7 @@ const TTSMenu = () => {
                         selected={lang}
                         data={languages}
                         labelExtractor={(item) => item}
-                        placeholder="Select Language"
+                        placeholder="选择语言"
                         onChangeValue={(item) => setLang(item)}
                     />
                     <ThemedButton
@@ -94,17 +94,17 @@ const TTSMenu = () => {
             </View>
 
             <SectionTitle style={{ marginTop: 8 }}>
-                Speaker ({modelList.filter((item) => item.language === lang).length})
+                发音人 ({modelList.filter((item) => item.language === lang).length})
             </SectionTitle>
 
             <DropdownSheet
                 style={{ marginBottom: 8 }}
                 search
-                modalTitle="Select Speaker"
+                modalTitle="选择发音人"
                 selected={currentSpeaker}
                 data={languageList?.[lang] ?? []}
                 labelExtractor={(item) => item.identifier}
-                placeholder="Select Speaker"
+                placeholder="选择发音人"
                 onChangeValue={(item) => setCurrentSpeaker(item)}
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 8 }}>
@@ -114,11 +114,11 @@ const TTSMenu = () => {
                     style={{ color: color.text._400, fontStyle: 'italic', flex: 1 }}
                 />
                 <ThemedButton
-                    label="Test"
+                    label="测试"
                     variant="secondary"
                     onPress={() => {
                         if (currentSpeaker === undefined) {
-                            Logger.warnToast(`No Speaker Chosen`)
+                            Logger.warnToast(`未选择发音人`)
                             return
                         }
                         Speech.speak(testAudioText, {
