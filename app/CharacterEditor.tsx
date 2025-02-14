@@ -51,19 +51,19 @@ const ChracterEditor = () => {
 
     usePreventRemove(edited, ({ data }) => {
         Alert.alert({
-            title: `Unsaved Changes`,
-            description: `You have unsaved changes, leaving now will discard your progress.`,
+            title: `未保存的更改`,
+            description: `您有未保存的更改，离开后将丢弃您的进度.`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Save',
+                    label: '保存',
                     onPress: async () => {
                         await handleSaveCard()
                         navigation.dispatch(data.action)
                     },
                 },
                 {
-                    label: 'Discard Changes',
+                    label: '丢弃更改',
                     onPress: () => {
                         navigation.dispatch(data.action)
                     },
@@ -78,18 +78,18 @@ const ChracterEditor = () => {
             return Characters.db.mutate.updateCard(characterCard, charId).then(() => {
                 setCurrentCard(charId)
                 setEdited(() => false)
-                Logger.infoToast('Card Saved!')
+                Logger.infoToast('卡牌已保存!')
             })
     }
 
     const handleDeleteCard = () => {
         Alert.alert({
-            title: `Delete Character`,
-            description: `Are you sure you want to delete '${charName}'? This cannot be undone.`,
+            title: `删除角色`,
+            description: `您确定要删除 '${charName}' 吗？此操作无法撤销.`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Character',
+                    label: '删除角色',
                     onPress: () => {
                         Characters.db.mutate.deleteCard(charId ?? -1)
                         unloadCharacter()
@@ -110,12 +110,12 @@ const ChracterEditor = () => {
 
     const handleDeleteImage = () => {
         Alert.alert({
-            title: `Delete Image`,
-            description: `Are you sure you want to delete this image? This cannot be undone.`,
+            title: `删除图片`,
+            description: `您确定要删除这张图片吗？此操作无法撤销.`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Image',
+                    label: '删除图片',
                     onPress: () => {
                         if (characterCard) Characters.deleteImage(characterCard.image_id)
                     },
@@ -155,7 +155,7 @@ const ChracterEditor = () => {
     const deleteAltMessageRoutine = async () => {
         const id = characterCard?.alternate_greetings[altSwipeIndex].id
         if (!id || !charId) {
-            Logger.errorToast('Error deleting swipe')
+            Logger.errorToast('删除备用消息出错')
             return
         }
         await Characters.db.mutate.deleteAltGreeting(id)
@@ -169,12 +169,12 @@ const ChracterEditor = () => {
 
     const handleDeleteAltMessage = async () => {
         Alert.alert({
-            title: `Delete Alternate Message`,
-            description: `Are you sure you want to delete this alternate message? This cannot be undone.`,
+            title: `删除备用消息`,
+            description: `您确定要删除这条备用消息吗？此操作无法撤销.`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete',
+                    label: '删除',
                     onPress: async () => {
                         await deleteAltMessageRoutine()
                     },
@@ -186,7 +186,7 @@ const ChracterEditor = () => {
 
     return (
         <FadeDownView style={styles.mainContainer}>
-            <HeaderTitle title="Edit Character" />
+            <HeaderTitle title="编辑角色" />
             <AvatarViewer editorButton={false} />
             {characterCard && (
                 <ScrollView
@@ -197,7 +197,7 @@ const ChracterEditor = () => {
                             placement="right"
                             options={[
                                 {
-                                    label: 'Change Image',
+                                    label: '更改图片',
                                     icon: 'picture',
                                     onPress: (menu) => {
                                         menu.current?.close()
@@ -205,7 +205,7 @@ const ChracterEditor = () => {
                                     },
                                 },
                                 {
-                                    label: 'View Image',
+                                    label: '查看图片',
                                     icon: 'search1',
                                     onPress: (menu) => {
                                         menu.current?.close()
@@ -213,7 +213,7 @@ const ChracterEditor = () => {
                                     },
                                 },
                                 {
-                                    label: 'Delete Image',
+                                    label: '删除图片',
                                     icon: 'delete',
                                     onPress: (menu) => {
                                         menu.current?.close()
@@ -239,7 +239,7 @@ const ChracterEditor = () => {
                                     iconName="delete"
                                     iconSize={20}
                                     variant="critical"
-                                    label="Delete"
+                                    label="删除"
                                     onPress={handleDeleteCard}
                                 />
 
@@ -247,7 +247,7 @@ const ChracterEditor = () => {
                                     <ThemedButton
                                         iconName="save"
                                         iconSize={20}
-                                        label="Save"
+                                        label="保存"
                                         onPress={handleSaveCard}
                                     />
                                 )}
@@ -266,7 +266,7 @@ const ChracterEditor = () => {
 
                     <ThemedTextInput
                         scrollEnabled
-                        label={`Description Tokens: ${getTokenCount(characterCard?.description ?? '')}`}
+                        label={`描述字数: ${getTokenCount(characterCard?.description ?? '')}`}
                         multiline
                         numberOfLines={8}
                         onChangeText={(mes) => {
@@ -279,7 +279,7 @@ const ChracterEditor = () => {
                     />
 
                     <ThemedTextInput
-                        label="First Message"
+                        label="首次消息"
                         multiline
                         onChangeText={(mes) => {
                             setCharacterCardEdited({
@@ -297,7 +297,7 @@ const ChracterEditor = () => {
                             justifyContent: 'space-between',
                         }}>
                         <Text style={{ color: color.text._100 }}>
-                            Alternate Greetings{' '}
+                            备用问候语{' '}
                             {characterCard.alternate_greetings.length !== 0 && (
                                 <Text
                                     style={{
@@ -375,12 +375,12 @@ const ChracterEditor = () => {
                                 color: color.text._500,
                                 fontStyle: 'italic',
                             }}>
-                            No Alternate Greetings
+                            无备用问候语
                         </Text>
                     )}
 
                     <ThemedTextInput
-                        label="Personality"
+                        label="个性"
                         multiline
                         numberOfLines={2}
                         onChangeText={(mes) => {
@@ -393,7 +393,7 @@ const ChracterEditor = () => {
                     />
 
                     <ThemedTextInput
-                        label="Scenario"
+                        label="场景"
                         multiline
                         onChangeText={(mes) => {
                             setCharacterCardEdited({
@@ -406,7 +406,7 @@ const ChracterEditor = () => {
                     />
 
                     <ThemedTextInput
-                        label="Example Messages"
+                        label="示例消息"
                         multiline
                         onChangeText={(mes) => {
                             setCharacterCardEdited({
