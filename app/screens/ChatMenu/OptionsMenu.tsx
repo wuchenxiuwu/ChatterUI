@@ -44,21 +44,21 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({ menuRef, showChats }) => {
                 unloadCharacter()
                 unloadChat()
             },
-            text: 'Main Menu',
+            text: '主菜单',
             button: 'back',
         },
         {
             callback: () => {
                 router.push('/CharacterEditor')
             },
-            text: 'Edit Character',
+            text: '编辑角色',
             button: 'edit',
         },
         {
             callback: () => {
                 showChats(true)
             },
-            text: 'Chat History',
+            text: '聊天记录',
             button: 'paperclip',
         },
     ]
