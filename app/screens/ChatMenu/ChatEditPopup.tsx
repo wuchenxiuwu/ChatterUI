@@ -28,19 +28,19 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, setNowLoading, nowL
 
     const { charName, charId } = Characters.useCharacterCard((state) => ({
         charId: state.id,
-        charName: state.card?.name ?? 'Unknown',
+        charName: state.card?.name ?? '未知',
     }))
 
     const { deleteChat, loadChat, chatId, unloadChat } = Chats.useChat()
 
     const handleDeleteChat = (menuRef: MenuRef) => {
         Alert.alert({
-            title: `Delete Chat`,
-            description: `Are you sure you want to delete '${item.name}'? This cannot be undone.`,
+            title: `删除聊天记录`,
+            description: `您确定要删除 '${item.name}' 吗？此操作无法撤销.`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Chat',
+                    label: '删除聊天记录',
                     onPress: async () => {
                         await deleteChat(item.id)
                         if (charId && chatId === item.id) {
@@ -50,7 +50,7 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, setNowLoading, nowL
                                 : await Chats.db.mutate.createChat(charId)
                             chatId && (await loadChat(chatId))
                         } else if (item.id === chatId) {
-                            Logger.errorToast(`Something went wrong with creating a default chat`)
+                            Logger.errorToast(`创建默认聊天记录时出错`)
                             unloadChat()
                         }
                         menuRef.current?.close()
@@ -63,12 +63,12 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, setNowLoading, nowL
 
     const handleCloneChat = (menuRef: MenuRef) => {
         Alert.alert({
-            title: `Clone Chat`,
-            description: `Are you sure you want to clone '${item.name}'?`,
+            title: `克隆聊天记录`,
+            description: `您确定要克隆 '${item.name}' 吗？`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Clone Chat',
+                    label: '克隆聊天记录',
                     onPress: async () => {
                         await Chats.db.mutate.cloneChat(item.id)
                         menuRef.current?.close()
@@ -82,7 +82,7 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, setNowLoading, nowL
         const name = `Chatlogs-${charName}-${item.id}.json`.replaceAll(' ', '_')
         await saveStringToDownload(JSON.stringify(await Chats.db.query.chat(item.id)), name, 'utf8')
         menuRef.current?.close()
-        Logger.infoToast(`File: ${name} saved to downloads!`)
+        Logger.infoToast(`文件: ${name} 已保存到下载目录!`)
     }
 
     return (
@@ -99,7 +99,7 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, setNowLoading, nowL
                 disabled={nowLoading}
                 options={[
                     {
-                        label: 'Rename',
+                        label: '重命名',
                         icon: 'edit',
                         onPress: (menuRef) => {
                             setShowRename(true)
@@ -107,17 +107,17 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, setNowLoading, nowL
                         },
                     },
                     {
-                        label: 'Export',
+                        label: '导出',
                         icon: 'download',
                         onPress: (menuRef) => handleExportChat(menuRef),
                     },
                     {
-                        label: 'Clone',
+                        label: '克隆',
                         icon: 'copy1',
                         onPress: handleCloneChat,
                     },
                     {
-                        label: 'Delete',
+                        label: '删除',
                         icon: 'delete',
                         warning: true,
                         onPress: handleDeleteChat,
