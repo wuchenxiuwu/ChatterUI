@@ -75,12 +75,12 @@ const useStyles = () => {
 
 const getPaths = (remote: boolean): ButtonData[] => [
     {
-        name: 'Sampler',
+        name: '采样器',
         path: '/SamplerMenu',
         icon: 'barschart',
     },
     {
-        name: 'Formatting',
+        name: '格式化',
         path: '/screens/FormattingManager',
         icon: 'profile',
     },
@@ -91,27 +91,27 @@ const getPaths = (remote: boolean): ButtonData[] => [
               icon: 'link',
           }
         : {
-              name: 'Models',
+              name: '模型',
               path: '/screens/ModelManager',
               icon: 'folderopen',
           },
     {
-        name: 'TTS',
+        name: '文本转语音',
         path: '/screens/TTSMenu',
         icon: 'sound',
     },
     {
-        name: 'Logs',
+        name: '日志',
         path: '/Logs',
         icon: 'codesquareo',
     },
     {
-        name: 'About',
+        name: '关于',
         path: '/About',
         icon: 'infocirlceo',
     },
     {
-        name: 'Settings',
+        name: '设置',
         path: '/AppSettingsMenu',
         icon: 'setting',
     },
@@ -119,15 +119,15 @@ const getPaths = (remote: boolean): ButtonData[] => [
 
 const paths_dev: ButtonData[] = [
     {
-        name: '[DEV] Components',
+        name: '[开发] 组件测试',
         path: '/ComponentTest',
     },
     {
-        name: '[DEV] ColorTest',
+        name: '[开发] 颜色测试',
         path: '/ColorTest',
     },
     {
-        name: '[DEV] Markdown',
+        name: '[开发] Markdown 测试',
         path: '/screens/MarkdownTest',
     },
 ]
