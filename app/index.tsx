@@ -23,8 +23,8 @@ const Home = () => {
     useEffect(() => {
         /**
          * Startup Routine:
-         * - wait for useMigration success
-         * - startupApp() - creates defaults
+         * - 等待迁移成功
+         * - startupApp() - 创建默认设置
          */
         if (success) {
             startupApp()
@@ -37,7 +37,7 @@ const Home = () => {
         return (
             <View style={styles.centeredContainer}>
                 <HeaderTitle />
-                <Text style={styles.title}>Database Migration Failed!</Text>
+                <Text style={styles.title}>数据库迁移失败！</Text>
             </View>
         )
 
@@ -51,9 +51,9 @@ const Home = () => {
                     style={{ marginBottom: 12 }}
                     color={color.text._500}
                 />
-                <Text style={styles.title}>Authentication Required</Text>
+                <Text style={styles.title}>需要身份验证</Text>
                 <TouchableOpacity onPress={retry} style={styles.button}>
-                    <Text style={styles.buttonText}>Try Again</Text>
+                    <Text style={styles.buttonText}>重试</Text>
                 </TouchableOpacity>
             </View>
         )
