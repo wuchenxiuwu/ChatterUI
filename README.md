@@ -1,7 +1,7 @@
 # ChatterUI - A simple app for LLMs
 
 ChatterUI is a native mobile frontend for LLMs.
-
+接下来 我将尝试中文全局翻译工程
 Run LLMs on device or connect to various commercial or open source APIs. ChatterUI aims to provide a mobile-friendly interface with fine-grained control over chat structuring.
 
 If you like the app, feel free support me here:
