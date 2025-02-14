@@ -35,7 +35,7 @@ const ModelManager = () => {
 
     return (
         <View style={styles.mainContainer}>
-            <HeaderTitle title={showSettings ? 'Model Settings' : 'Models'} />
+            <HeaderTitle title={showSettings ? '模型设置' : '模型'} />
             <HeaderButton
                 headerRight={() =>
                     !showSettings && (
@@ -58,17 +58,16 @@ const ModelManager = () => {
                                 style={{
                                     flexDirection: 'row',
                                 }}>
-                                <Text style={styles.subtitle}>Model Loaded: </Text>
+                                <Text style={styles.subtitle}>已加载模型: </Text>
                                 <Text style={styles.modelTitle} ellipsizeMode="tail">
-                                    {modelName ? modelName : 'None'}
+                                    {modelName ? modelName : '无'}
                                 </Text>
                             </View>
                         )}
                         {!modelImporting && !modelLoading && data.length === 0 && updatedAt && (
                             <View>
                                 <Text style={styles.hint}>
-                                    Hint: Press <AntDesign name="addfile" size={16} /> and import a
-                                    GGUF model!
+                                    提示: 按 <AntDesign name="addfile" size={16} /> 并导入一个 GGUF 模型！
                                 </Text>
                             </View>
                         )}
@@ -92,7 +91,7 @@ const ModelManager = () => {
                                         color: color.text._100,
                                         textAlign: 'center',
                                     }}>
-                                    Importing...
+                                    正在导入...
                                 </Text>
                             </View>
                         )}
@@ -152,7 +151,7 @@ const ModelManager = () => {
                 />
             )}
             <ThemedButton
-                label={showSettings ? 'Back To Models' : 'Show Settings'}
+                label={showSettings ? '返回模型' : '显示设置'}
                 onPress={() => setShowSettings(!showSettings)}
             />
         </View>
