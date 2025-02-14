@@ -49,7 +49,7 @@ const UserList: React.FC<UserListProps> = ({ setShowModal }) => {
                         fontSize: fontSize.l,
                         color: color.text._300,
                     }}>
-                    User Profiles ({data.length})
+                    用户资料 ({data.length})
                 </Text>
             </View>
             <View style={{ flex: 1 }}>
@@ -68,7 +68,7 @@ const UserList: React.FC<UserListProps> = ({ setShowModal }) => {
                     estimatedItemSize={100}
                     initialScrollIndex={Math.max(currentIndex, 0)}
                 />
-                <ThemedButton label="New User" onPress={() => setShowNewUser(true)} />
+                <ThemedButton label="新建用户" onPress={() => setShowNewUser(true)} />
             </View>
         </View>
     )
