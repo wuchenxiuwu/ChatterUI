@@ -48,7 +48,7 @@ const ChatMenu = () => {
         if (chat) {
             unloadChat()
             unloadCharacter()
-            Logger.debug('Returning to primary Menu')
+            Logger.debug('返回主菜单')
             return true
         }
         BackHandler.exitApp()
