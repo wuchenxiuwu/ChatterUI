@@ -58,15 +58,15 @@ const ModelSettings: React.FC<ModelSettingsProp> = ({ modelImporting, modelLoadi
 
     const handleDeleteKV = () => {
         Alert.alert({
-            title: 'Delete KV Cache',
-            description: `Are you sure you want to delete the KV Cache? This cannot be undone. \n\n This will clear up ${readableFileSize(kvSize)} of space.`,
+            title: '删除 KV 缓存',
+            description: `您确定要删除 KV 缓存吗？此操作无法撤销。 \n\n 这将释放 ${readableFileSize(kvSize)} 的空间.`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete KV Cache',
+                    label: '删除 KV 缓存',
                     onPress: async () => {
                         await KV.deleteKV()
-                        Logger.info('KV Cache deleted!')
+                        Logger.info('KV 缓存已删除!')
                         getKVSize()
                     },
                     type: 'warning',
@@ -81,12 +81,12 @@ const ModelSettings: React.FC<ModelSettingsProp> = ({ modelImporting, modelLoadi
             style={{ flex: 1 }}
             entering={SlideInRight.easing(Easing.inOut(Easing.cubic))}
             exiting={SlideOutRight.easing(Easing.inOut(Easing.cubic))}>
-            <SectionTitle>CPU Settings</SectionTitle>
+            <SectionTitle>CPU 设置</SectionTitle>
             <View style={{ marginTop: 16 }} />
             {config && (
                 <View>
                     <ThemedSlider
-                        label="Max Context"
+                        label="最大上下文长度"
                         value={config.context_length}
                         onValueChange={(value) => setConfig({ ...config, context_length: value })}
                         min={1024}
@@ -95,7 +95,7 @@ const ModelSettings: React.FC<ModelSettingsProp> = ({ modelImporting, modelLoadi
                         disabled={modelImporting || modelLoading}
                     />
                     <ThemedSlider
-                        label="Threads"
+                        label="线程数"
                         value={config.threads}
                         onValueChange={(value) => setConfig({ ...config, threads: value })}
                         min={1}
@@ -105,7 +105,7 @@ const ModelSettings: React.FC<ModelSettingsProp> = ({ modelImporting, modelLoadi
                     />
 
                     <ThemedSlider
-                        label="Batch"
+                        label="批量大小"
                         value={config.batch}
                         onValueChange={(value) => setConfig({ ...config, batch: value })}
                         min={16}
@@ -116,7 +116,7 @@ const ModelSettings: React.FC<ModelSettingsProp> = ({ modelImporting, modelLoadi
                     {/* Note: llama.rn does not have any Android gpu acceleration */}
                     {Platform.OS === 'ios' && (
                         <ThemedSlider
-                            label="GPU Layers"
+                            label="GPU 层数"
                             value={config.gpu_layers}
                             onValueChange={(value) => setConfig({ ...config, gpu_layers: value })}
                             min={0}
@@ -126,26 +126,26 @@ const ModelSettings: React.FC<ModelSettingsProp> = ({ modelImporting, modelLoadi
                     )}
                 </View>
             )}
-            <SectionTitle>Advanced Settings</SectionTitle>
+            <SectionTitle>高级设置</SectionTitle>
             <ThemedSwitch
-                label="Automatically Load Model on Chat"
+                label="在聊天时自动加载模型"
                 value={autoloadLocal}
                 onChangeValue={setAutoloadLocal}
             />
             <ThemedSwitch
-                label="Save Local KV"
+                label="保存本地 KV"
                 value={saveKV}
                 onChangeValue={setSaveKV}
                 description={
                     saveKV
                         ? ''
-                        : 'Saves the KV cache on generations, allowing you to continue sessions after closing the app. Must use the same model for this to function properly. Saving the KV cache file may be very big and negatively impact battery life!'
+                        : '在生成过程中保存 KV 缓存，允许您在关闭应用后继续会话。必须使用相同的模型才能正常工作。保存 KV 缓存文件可能会非常大，并可能对电池寿命产生负面影响！'
                 }
             />
             {saveKV && (
                 <ThemedButton
                     buttonStyle={{ marginTop: 8 }}
-                    label={'Purge KV Cache (' + readableFileSize(kvSize) + ')'}
+                    label={'清除 KV 缓存 (' + readableFileSize(kvSize) + ')'}
                     onPress={handleDeleteKV}
                     variant={kvSize === 0 ? 'disabled' : 'critical'}
                 />
