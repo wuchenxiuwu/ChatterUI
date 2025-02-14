@@ -8,17 +8,6 @@ import { useState } from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { create } from 'zustand'
 
-/*const insertRandomData = async () => {
-    const input = Array(8)
-        .fill(0)
-        .map((item) => Math.random())
-    const id = await ddb
-        .insert(vec_table)
-        .values({ sample_embedding: input })
-        .returning({ id: vec_table.id })
-    console.log(id)
-}*/
-
 const EmbeddingScreen = () => {
     const { color } = Theme.useTheme()
     const { loadModel, getEmbed } = EmbeddingState.useEmbedding((state) => ({
@@ -31,7 +20,6 @@ const EmbeddingScreen = () => {
         const input = `[${Array(8)
             .fill(0)
             .map((item) => 2 * (Math.random() - 0.5))}]`
-        //const input = `[-0.200, 0.250, 0.341, -0.211, 0.645, 0.935, -0.316, -0.924]`
         const data = await rawdb.getAllAsync(`select
         id,
         distance
@@ -40,7 +28,6 @@ const EmbeddingScreen = () => {
         order by distance
       limit 1`)
         console.log(input)
-
         console.log(data)
         console.log('Time taken:', performance.now() - now)
     }
@@ -50,12 +37,12 @@ const EmbeddingScreen = () => {
     const [output, setoutput] = useState<string>('')
     return (
         <View style={{ margin: 8 }}>
-            <Text>Embedding</Text>
+            <Text>嵌入</Text>
             <TouchableOpacity
                 onPress={() => {
-                    console.log('Reimplement if needed')
+                    console.log('如有需要，请重新实现')
                 }}>
-                <Text style={{ color: color.text._100 }}>Load Model</Text>
+                <Text style={{ color: color.text._100 }}>加载模型</Text>
             </TouchableOpacity>
             <TextInput
                 value={t1}
@@ -94,16 +81,16 @@ const EmbeddingScreen = () => {
                         s1 += v1.embedding[index] * v1.embedding[index]
                         s2 += v2.embedding[index] * v2.embedding[index]
                     })
-                    setoutput(`Score: ${dotprod / (Math.sqrt(s1) * Math.sqrt(s2))}`)
+                    setoutput(`得分: ${dotprod / (Math.sqrt(s1) * Math.sqrt(s2))}`)
                 }}>
-                <Text style={{ color: color.text._100 }}>Test Embedding</Text>
+                <Text style={{ color: color.text._100 }}>测试嵌入</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={async () => {
                     sett1('')
                     sett2('')
                 }}>
-                <Text style={{ color: color.text._100 }}>CLEAR</Text>
+                <Text style={{ color: color.text._100 }}>清除</Text>
             </TouchableOpacity>
             <Text style={{ color: color.text._100 }}>{output}</Text>
             <View style={{ margin: 16 }} />
@@ -111,25 +98,25 @@ const EmbeddingScreen = () => {
                 onPress={async () => {
                     deleteTables()
                 }}>
-                <Text style={{ color: color.text._100 }}>Delete DB</Text>
+                <Text style={{ color: color.text._100 }}>删除数据库</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={async () => {
                     createTables()
                 }}>
-                <Text style={{ color: color.text._100 }}>Make DB</Text>
+                <Text style={{ color: color.text._100 }}>创建数据库</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={async () => {
                     insertData()
                 }}>
-                <Text style={{ color: color.text._100 }}>Insert data</Text>
+                <Text style={{ color: color.text._100 }}>插入数据</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={async () => {
                     getData()
                 }}>
-                <Text style={{ color: color.text._100 }}>Query</Text>
+                <Text style={{ color: color.text._100 }}>查询</Text>
             </TouchableOpacity>
         </View>
     )
