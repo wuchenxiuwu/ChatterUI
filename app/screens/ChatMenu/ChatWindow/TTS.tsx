@@ -16,12 +16,12 @@ const TTS: React.FC<TTSProps> = ({ index }) => {
     const isSpeaking = index === activeChatIndex
 
     const handleSpeak = async () => {
-        Logger.info('Starting TTS')
+        Logger.info('开始 TTS')
         await startTTS(swipeText, index)
     }
 
     const handleStopSpeaking = async () => {
-        Logger.info('TTS stopped')
+        Logger.info('TTS 已停止')
         await stopTTS()
     }
 
