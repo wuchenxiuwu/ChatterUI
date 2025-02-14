@@ -6,54 +6,54 @@ import { StyleSheet, Platform, ScrollView } from 'react-native'
 import Markdown from 'react-native-markdown-display'
 
 const markdownData = `
-# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-###### Heading 6
-Here's some regular text
+# 标题 1
+## 标题 2
+### 标题 3
+#### 标题 4
+##### 标题 5
+###### 标题 6
+这里是一些普通文本
 
 ---
 
-A **strong** (bold) text example.
+一个加粗文本示例。
 
-A *emphasized* (italic) text example.
+一个斜体文本示例。
 
-A ~~strikethrough~~ text example.
+一个删除线文本示例。
 
-> This is a blockquote.  
-> > This is a nested blockquote.
+> 这是一个引用块。
+> > 这是一个嵌套引用块。
 > 
-> Exit
-> > Again!
+> 退出
+> > 再次！
 
-- Bullet list item 1
-- Bullet list item 2
-- Bullet list item 3
+- 项目 1
+- 项目 2
+- 项目 3
 
-1. Ordered list item 1
-2. Ordered list item 2
-3. Ordered list item 3
+1. 项目 1
+2. 项目 2
+3. 项目 3
 
-A list inside a list:
+一个列表中的列表：
 
-- Item 1
-  - Sub-item 1
-  - Sub-item 2
+- 项目 1
+  - 子项目 1
+  - 子项目 2
 
-Inline \`code_inline\` example.
+内联代码示例。
 
 \`\`\`
-Here is a block code
+这是一个代码块
 \`\`\`
 
-| Row One  | Row Two | Row Three   |
-|----------|--------:|-------------|
-| Item 1   |  row    | row         |
-| Item 2   |  row    | row         |
-| Item 3   |  row    | row         |
-| Item 4   |  row    | row         |
+| 第一行   | 第二行 | 第三行     |
+|----------|--------|------------|
+| 项目 1   | 项目   | 项目       |
+| 项目 2   | 项目   | 项目       |
+| 项目 3   | 项目   | 项目       |
+| 项目 4   | 项目   | 项目       |
 
 
 `
@@ -62,7 +62,7 @@ const MarkdownTest = () => {
     const markdownStyle = MarkdownStyle.useMarkdownStyle()
     return (
         <ScrollView contentContainerStyle={{ padding: 16 }}>
-            <HeaderTitle title="Markdown Test" />
+            <HeaderTitle title="Markdown 测试" />
             <Markdown
                 mergeStyle={false}
                 markdownit={MarkdownStyle.Rules}
