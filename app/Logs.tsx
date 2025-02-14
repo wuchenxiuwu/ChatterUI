@@ -24,21 +24,21 @@ const Logs = () => {
             .join('\n')
         saveStringToDownload(data, 'logs.txt', 'utf8')
             .then(() => {
-                Logger.infoToast('Logs Downloaded!')
+                Logger.infoToast('日志已下载！')
             })
             .catch((e) => {
-                Logger.errorToast(`Could Not Export Logs: ${e}`)
+                Logger.errorToast(`无法导出日志: ${e}`)
             })
     }
 
     const handleFlushLogs = () => {
         Alert.alert({
-            title: `Delete Logs`,
-            description: `Are you sure you want to delete all logs? This cannot be undone.`,
+            title: `删除日志`,
+            description: `您确定要删除所有日志吗？此操作无法撤销。`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Logs',
+                    label: '删除日志',
                     onPress: async () => {
                         flushLogs()
                     },
@@ -61,7 +61,7 @@ const Logs = () => {
             icon="setting"
             options={[
                 {
-                    label: 'Export Logs',
+                    label: '导出日志',
                     icon: 'export',
                     onPress: (m) => {
                         handleExportLogs()
@@ -69,7 +69,7 @@ const Logs = () => {
                     },
                 },
                 {
-                    label: 'Flush Logs',
+                    label: '清除日志',
                     icon: 'delete',
                     onPress: (m) => {
                         handleFlushLogs()
@@ -83,7 +83,7 @@ const Logs = () => {
 
     return (
         <FadeDownView style={{ flex: 1 }}>
-            <HeaderTitle title="Logs" />
+            <HeaderTitle title="日志" />
             <HeaderButton headerRight={headerRight} />
 
             <View
