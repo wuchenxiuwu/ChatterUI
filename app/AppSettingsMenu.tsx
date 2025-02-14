@@ -1,93 +1,93 @@
-import ThemedButton from '@components/buttons/ThemedButton'
-import ThemedSwitch from '@components/input/ThemedSwitch'
-import SectionTitle from '@components/text/SectionTitle'
-import Alert from '@components/views/Alert'
-import HeaderTitle from '@components/views/HeaderTitle'
-import { AppSettings } from '@lib/constants/GlobalValues'
-import { registerForPushNotificationsAsync } from '@lib/notifications/Notifications'
-import { Characters } from '@lib/state/Characters'
-import { Logger } from '@lib/state/Logger'
-import { Theme } from '@lib/theme/ThemeManager'
-import appConfig from 'app.config'
-import { copyFile, DocumentDirectoryPath, DownloadDirectoryPath } from 'cui-fs'
-import { reloadAppAsync } from 'expo'
-import { getDocumentAsync } from 'expo-document-picker'
-import { copyAsync, deleteAsync, documentDirectory } from 'expo-file-system'
-import { useRouter } from 'expo-router'
-import React from 'react'
-import { ScrollView, Text, View } from 'react-native'
-import { useMMKVBoolean } from 'react-native-mmkv'
+import ThemedButton from '@components/buttons/ThemedButton' // 主题按钮
+import ThemedSwitch from '@components/input/ThemedSwitch' // 主题开关
+import SectionTitle from '@components/text/SectionTitle' // 分段标题
+import Alert from '@components/views/Alert' // 警告框
+import HeaderTitle from '@components/views/HeaderTitle' // 标题头
+import { AppSettings } from '@lib/constants/GlobalValues' // 应用设置
+import { registerForPushNotificationsAsync } from '@lib/notifications/Notifications' // 注册推送通知
+import { Characters } from '@lib/state/Characters' // 角色管理
+import { Logger } from '@lib/state/Logger' // 日志记录器
+import { Theme } from '@lib/theme/ThemeManager' // 主题管理器
+import appConfig from 'app.config' // 应用配置
+import { copyFile, DocumentDirectoryPath, DownloadDirectoryPath } from 'cui-fs' // 文件操作
+import { reloadAppAsync } from 'expo' // 重新加载应用
+import { getDocumentAsync } from 'expo-document-picker' // 文件选择器
+import { copyAsync, deleteAsync, documentDirectory } from 'expo-file-system' // 文件系统操作
+import { useRouter } from 'expo-router' // 路由器
+import React from 'react' // React
+import { ScrollView, Text, View } from 'react-native' // React Native 组件
+import { useMMKVBoolean } from 'react-native-mmkv' // 状态管理
 
-const appVersion = appConfig.expo.version
+const appVersion = appConfig.expo.version // 应用版本
 
-const exportDB = async (notify: boolean = true) => {
+const exportDB = async (notify: boolean = true) => { // 导出数据库
     await copyFile(
-        `${DocumentDirectoryPath}/SQLite/db.db`,
-        `${DownloadDirectoryPath}/${appVersion}-db-backup.db`
+        `${DocumentDirectoryPath}/SQLite/db.db`, // 源文件路径
+        `${DownloadDirectoryPath}/${appVersion}-db-backup.db` // 目标文件路径
     )
         .then(() => {
-            if (notify) Logger.infoToast('Download Successful!')
+            if (notify) Logger.infoToast('下载成功！') // 下载成功提示
         })
-        .catch((e) => Logger.errorToast('Failed to copy database: ' + e))
+        .catch((e) => Logger.errorToast('复制数据库失败: ' + e)) // 复制失败提示
 }
 
-const importDB = async (uri: string, name: string) => {
+const importDB = async (uri: string, name: string) => { // 导入数据库
     const copyDB = async () => {
-        await exportDB(false)
+        await exportDB(false) // 导出数据库（不提示）
         await deleteAsync(`${documentDirectory}SQLite/db.db`).catch(() => {
-            Logger.debug('Somehow the db is already deleted')
+            Logger.debug('数据库已删除') // 数据库已删除日志
         })
         await copyAsync({
-            from: uri,
-            to: `${documentDirectory}SQLite/db.db`,
+            from: uri, // 源文件
+            to: `${documentDirectory}SQLite/db.db`, // 目标文件
         })
             .then(() => {
-                Logger.info('Copy Successful, Restarting now.')
-                reloadAppAsync()
+                Logger.info('复制成功，正在重启应用。') // 复制成功并重启提示
+                reloadAppAsync() // 重新加载应用
             })
             .catch((e) => {
-                Logger.errorToast(`Failed to import database: ${e}`)
+                Logger.errorToast(`导入数据库失败: ${e}`) // 导入失败提示
             })
     }
 
-    const dbAppVersion = name.split('-')?.[0]
-    if (dbAppVersion !== appVersion) {
+    const dbAppVersion = name.split('-')?.[0] // 数据库版本号
+    if (dbAppVersion !== appVersion) { // 版本号不匹配
         Alert.alert({
-            title: `WARNING: Different Version`,
-            description: `The imported database file has a different app version (${dbAppVersion}) to installed version (${appVersion}).\n\nImporting this database may break or corrupt the database. It is recommended to use the same app version.`,
+            title: `警告：版本不同`, // 警告：版本不同
+            description: `导入的数据库文件的版本 (${dbAppVersion}) 与当前安装的版本 (${appVersion}) 不同。\n\n导入此数据库可能会导致数据库损坏或无法正常使用。建议使用相同版本的数据库。`, // 描述：导入的数据库版本与当前版本不同，可能导致数据库损坏，建议使用相同版本
             buttons: [
-                { label: 'Cancel' },
-                { label: 'Import Anyways', onPress: copyDB, type: 'warning' },
+                { label: '取消' }, // 取消按钮
+                { label: '仍然导入', onPress: copyDB, type: 'warning' }, // 强制导入按钮
             ],
         })
-    } else copyDB()
+    } else copyDB() // 版本匹配，直接导入
 }
 
 const AppSettingsMenu = () => {
-    const router = useRouter()
-    const { color, spacing } = Theme.useTheme()
-    const [printContext, setPrintContext] = useMMKVBoolean(AppSettings.PrintContext)
-    const [firstMes, setFirstMes] = useMMKVBoolean(AppSettings.CreateFirstMes)
-    const [chatOnStartup, setChatOnStartup] = useMMKVBoolean(AppSettings.ChatOnStartup)
-    const [autoScroll, setAutoScroll] = useMMKVBoolean(AppSettings.AutoScroll)
-    const [sendOnEnter, setSendOnEnter] = useMMKVBoolean(AppSettings.SendOnEnter)
+    const router = useRouter() // 路由器
+    const { color, spacing } = Theme.useTheme() // 主题颜色和间距
+    const [printContext, setPrintContext] = useMMKVBoolean(AppSettings.PrintContext) // 打印上下文
+    const [firstMes, setFirstMes] = useMMKVBoolean(AppSettings.CreateFirstMes) // 使用第一条消息
+    const [chatOnStartup, setChatOnStartup] = useMMKVBoolean(AppSettings.ChatOnStartup) // 启动时加载聊天
+    const [autoScroll, setAutoScroll] = useMMKVBoolean(AppSettings.AutoScroll) // 自动滚动
+    const [sendOnEnter, setSendOnEnter] = useMMKVBoolean(AppSettings.SendOnEnter) // 按 Enter 发送
     const [bypassContextLength, setBypassContextLength] = useMMKVBoolean(
         AppSettings.BypassContextLength
-    )
+    ) // 绕过上下文长度限制
     const [notificationOnGenerate, setNotificationOnGenerate] = useMMKVBoolean(
         AppSettings.NotifyOnComplete
-    )
+    ) // 启用通知
     const [notificationSound, setNotificationSound] = useMMKVBoolean(
         AppSettings.PlayNotificationSound
-    )
+    ) // 通知声音
     const [notificationVibrate, setNotificationVibrate] = useMMKVBoolean(
         AppSettings.VibrateNotification
-    )
+    ) // 通知震动
     const [showNotificationText, setShowNotificationText] = useMMKVBoolean(
         AppSettings.ShowNotificationText
-    )
-    const [authLocal, setAuthLocal] = useMMKVBoolean(AppSettings.LocallyAuthenticateUser)
-    const [unlockOrientation, setUnlockOrientation] = useMMKVBoolean(AppSettings.UnlockOrientation)
+    ) // 在通知中显示文本
+    const [authLocal, setAuthLocal] = useMMKVBoolean(AppSettings.LocallyAuthenticateUser) // 锁定应用程序
+    const [unlockOrientation, setUnlockOrientation] = useMMKVBoolean(AppSettings.UnlockOrientation) // 解锁方向
 
     return (
         <ScrollView
@@ -97,66 +97,66 @@ const AppSettingsMenu = () => {
                 paddingBottom: spacing.xl3,
             }}
             contentContainerStyle={{ rowGap: spacing.sm }}>
-            <HeaderTitle title="Settings" />
+            <HeaderTitle title="设置" /> // 设置标题
 
-            <SectionTitle>Style</SectionTitle>
+            <SectionTitle>样式</SectionTitle> // 样式
 
             <ThemedButton
-                label="Change Theme"
+                label="更改主题"
                 variant="secondary"
-                onPress={() => router.push('/ColorSelector')}
+                onPress={() => router.push('/ColorSelector')} // 跳转到颜色选择器
             />
 
-            <SectionTitle>Chat</SectionTitle>
+            <SectionTitle>聊天</SectionTitle> // 聊天
 
             <ThemedSwitch
-                label="Auto Scroll"
+                label="自动滚动"
                 value={autoScroll}
                 onChangeValue={setAutoScroll}
-                description="Autoscrolls text during generations"
+                description="在生成过程中自动滚动文本"
             />
 
             <ThemedSwitch
-                label="Use First Message"
+                label="使用第一条消息"
                 value={firstMes}
                 onChangeValue={setFirstMes}
-                description="Disabling this will make new chats start blank, needed by specific models"
+                description="禁用后新聊天将为空，某些模型需要此设置"
             />
 
             <ThemedSwitch
-                label="Load Chat On Startup"
+                label="启动时加载聊天"
                 value={chatOnStartup}
                 onChangeValue={setChatOnStartup}
-                description="Loads the most recent chat on startup"
+                description="启动时加载最近的聊天"
             />
 
             <ThemedSwitch
-                label="Send on Enter"
+                label="按 Enter 发送"
                 value={sendOnEnter}
                 onChangeValue={setSendOnEnter}
-                description="Submits messages when Enter is pressed"
+                description="按 Enter 提交消息"
             />
 
-            <SectionTitle>Generation</SectionTitle>
+            <SectionTitle>生成</SectionTitle> // 生成
 
             <ThemedSwitch
-                label="Print Context"
+                label="打印上下文"
                 value={printContext}
                 onChangeValue={setPrintContext}
-                description="Prints the generation context to logs for debugging"
+                description="将生成上下文打印到日志中以便调试"
             />
 
             <ThemedSwitch
-                label="Bypass Context Length"
+                label="绕过上下文长度限制"
                 value={bypassContextLength}
                 onChangeValue={setBypassContextLength}
-                description="Ignores context length limits when building prompts"
+                description="在构建提示时忽略上下文长度限制"
             />
 
-            <SectionTitle>Notifications</SectionTitle>
+            <SectionTitle>通知</SectionTitle> // 通知
 
             <ThemedSwitch
-                label="Enable Notifications"
+                label="启用通知"
                 value={notificationOnGenerate}
                 onChangeValue={async (value) => {
                     if (!value) {
@@ -164,55 +164,57 @@ const AppSettingsMenu = () => {
                         return
                     }
 
-                    const granted = await registerForPushNotificationsAsync()
+                    const granted = await registerForPushNotificationsAsync() // 注册推送通知
                     if (granted) {
                         setNotificationOnGenerate(true)
                     }
                 }}
-                description="Sends notifications when the app is in the background"
+                description="应用在后台时发送通知"
             />
 
             {notificationOnGenerate && (
                 <View>
                     <ThemedSwitch
-                        label="Notification Sound"
+                        label="通知声音"
                         value={notificationSound}
                         onChangeValue={setNotificationSound}
                         description=""
                     />
 
                     <ThemedSwitch
-                        label="Notification Vibration"
+                        label="通知震动"
                         value={notificationVibrate}
                         onChangeValue={setNotificationVibrate}
                         description=""
                     />
 
                     <ThemedSwitch
-                        label="Show Text In Notification"
+                        label="在通知中显示文本"
                         value={showNotificationText}
                         onChangeValue={setShowNotificationText}
-                        description="Shows generated messages in notifications"
+                        description="在通知中显示生成的消息"
                     />
                 </View>
             )}
 
-            <SectionTitle>Character Management</SectionTitle>
+            <SectionTitle>角色管理</SectionTitle> // 角色管理
+
             <ThemedButton
-                label="Regenerate Default Card"
+                label="重新生成默认卡片"
                 variant="secondary"
                 onPress={() => {
                     Alert.alert({
-                        title: `Regenerate Default Card`,
-                        description: `This will add the default AI Bot card to your character list.`,
+                        title: `重新生成默认卡片`, // 重新生成默认卡片
+                        description: `这将把默认 AI 机器人卡片添加到角色列表中。`, // 这将把默认 AI 机器人卡片添加到角色列表中
                         buttons: [
-                            { label: 'Cancel' },
-                            { label: 'Create Default Card', onPress: Characters.createDefaultCard },
+                            { label: '取消' }, // 取消
+                            { label: '创建默认卡片', onPress: Characters.createDefaultCard }, // 创建默认卡片
                         ],
                     })
                 }}
             />
-            <SectionTitle>Database Management</SectionTitle>
+
+            <SectionTitle>数据库管理</SectionTitle> // 数据库管理
 
             <Text
                 style={{
@@ -220,38 +222,39 @@ const AppSettingsMenu = () => {
                     paddingBottom: spacing.xs,
                     marginBottom: spacing.m,
                 }}>
-                WARNING: only import if you are certain it's from the same version!
+                警告：只有当你确定数据来自同一版本时，才进行导入操作！
             </Text>
+
             <ThemedButton
-                label="Export Database"
+                label="导出数据库"
                 variant="secondary"
                 onPress={() => {
                     Alert.alert({
-                        title: `Export Database`,
-                        description: `Are you sure you want to export the database file?\n\nIt will automatically be downloaded to Downloads`,
+                        title: `导出数据库`, // 导出数据库
+                        description: `确定要导出数据库文件吗?\n\n它将自动被下载`, // 确定要导出数据库文件吗？它将自动被下载
                         buttons: [
-                            { label: 'Cancel' },
-                            { label: 'Export Database', onPress: exportDB },
+                            { label: '取消' }, // 取消
+                            { label: '导出数据库', onPress: exportDB }, // 导出数据库
                         ],
                     })
                 }}
             />
 
             <ThemedButton
-                label="Import Database"
+                label="导入数据库"
                 variant="secondary"
                 onPress={async () => {
                     getDocumentAsync({ type: ['application/*'] }).then(async (result) => {
                         if (result.canceled) return
                         Alert.alert({
-                            title: `Import Database`,
-                            description: `Are you sure you want to import this database? This may will destroy the current database!\n\nA backup will automatically be downloaded.\n\nApp will restart automatically`,
+                            title: `导入数据库`, // 导入数据库
+                            description: `确定要导入此数据库吗？这可能会破坏当前的数据库!\n\n系统将自动下载备份.\n\n应用将自动重新启动`, // 确定要导入此数据库吗？这可能会破坏当前的数据库！系统将自动下载备份。应用将自动重新启动
                             buttons: [
-                                { label: 'Cancel' },
+                                { label: '取消' }, // 取消
                                 {
-                                    label: 'Import',
+                                    label: '导入',
                                     onPress: () =>
-                                        importDB(result.assets[0].uri, result.assets[0].name),
+                                        importDB(result.assets[0].uri, result.assets[0].name), // 导入数据库
                                     type: 'warning',
                                 },
                             ],
@@ -260,20 +263,22 @@ const AppSettingsMenu = () => {
                 }}
             />
 
-            <SectionTitle>Security</SectionTitle>
+            <SectionTitle>安全</SectionTitle> // 安全
+
             <ThemedSwitch
-                label="Lock App"
+                label="锁定应用程序"
                 value={authLocal}
                 onChangeValue={setAuthLocal}
-                description="Requires user authentication to open the app. This will not work if you have no device locks enabled."
+                description="需要用户身份验证才能打开应用程序。如果您没有启用设备锁，则此操作将不起作用."
             />
 
-            <SectionTitle>Screen</SectionTitle>
+            <SectionTitle>屏幕</SectionTitle> // 屏幕
+
             <ThemedSwitch
-                label="Unlock Orientation"
+                label="解锁方向"
                 value={unlockOrientation}
                 onChangeValue={setUnlockOrientation}
-                description="Allows landscape on phones (App restart required)"
+                description="允许在手机上显示窗口 (需要重启应用程序)"
             />
 
             <View style={{ paddingVertical: spacing.xl3 }} />
