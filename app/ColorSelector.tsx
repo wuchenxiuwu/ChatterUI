@@ -1,20 +1,20 @@
-import ThemedButton from '@components/buttons/ThemedButton'
-import Alert from '@components/views/Alert'
-import HeaderButton from '@components/views/HeaderButton'
-import HeaderTitle from '@components/views/HeaderTitle'
-import PopupMenu from '@components/views/PopupMenu'
-import { DefaultColorSchemes, ThemeColor } from '@lib/theme/ThemeColor'
-import { Theme } from '@lib/theme/ThemeManager'
-import { pickJSONDocument } from '@lib/utils/File'
-import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import ThemedButton from '@components/buttons/ThemedButton';
+import Alert from '@components/views/Alert';
+import HeaderButton from '@components/views/HeaderButton';
+import HeaderTitle from '@components/views/HeaderTitle';
+import PopupMenu from '@components/views/PopupMenu';
+import { DefaultColorSchemes, ThemeColor } from '@lib/theme/ThemeColor';
+import { Theme } from '@lib/theme/ThemeManager';
+import { pickJSONDocument } from '@lib/utils/File';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 type ColorThemeItemProps = {
-    item: ThemeColor
-    index: number
-    showDelete?: boolean
-}
+    item: ThemeColor;
+    index: number;
+    showDelete?: boolean;
+};
 
 const ColorThemeItem: React.FC<ColorThemeItemProps> = ({ item, index, showDelete = false }) => {
     const { color, setColor, customColors, addCustomColor, removeColorScheme, length } =
@@ -25,24 +25,24 @@ const ColorThemeItem: React.FC<ColorThemeItemProps> = ({ item, index, showDelete
             addCustomColor: state.addCustomColor,
             removeColorScheme: state.removeColorScheme,
             length: state.customColors.length,
-        }))
+        }));
 
     const handleRemoveColorScheme = (index: number) => {
         Alert.alert({
-            title: 'Delete Theme',
-            description: `Are you sure you want to delete ${customColors[0].name}? This cannot be undone!`,
+            title: '删除主题',
+            description: `确定要删除主题 ${customColors[0].name} 吗？此操作不可撤销！`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Theme',
+                    label: '删除主题',
                     type: 'warning',
                     onPress: () => {
-                        removeColorScheme(index)
+                        removeColorScheme(index);
                     },
                 },
             ],
-        })
-    }
+        });
+    };
 
     return (
         <View
@@ -98,7 +98,7 @@ const ColorThemeItem: React.FC<ColorThemeItemProps> = ({ item, index, showDelete
                                 paddingVertical: 2,
                                 borderRadius: 8,
                             }}>
-                            Active
+                            已激活
                         </Text>
                     )}
                 </View>
@@ -109,29 +109,29 @@ const ColorThemeItem: React.FC<ColorThemeItemProps> = ({ item, index, showDelete
                         iconSize={20}
                         iconName="delete"
                         onPress={() => {
-                            handleRemoveColorScheme(index)
+                            handleRemoveColorScheme(index);
                         }}
                     />
                 ) : (
                     <Text style={{ color: item.text._500 }}>
-                        {showDelete ? 'Custom' : 'Built-in'}
+                        {showDelete ? '自定义' : '内置'}
                     </Text>
                 )}
             </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 const ColorSelector = () => {
     const { color, customColors, addCustomColor } = Theme.useColorState((state) => ({
         color: state.color,
         customColors: state.customColors,
         addCustomColor: state.addCustomColor,
-    }))
+    }));
 
     return (
         <View style={{ padding: 16, rowGap: 16 }}>
-            <HeaderTitle title="Themes" />
+            <HeaderTitle title="主题" />
             <HeaderButton
                 headerRight={() => (
                     <PopupMenu
@@ -139,14 +139,14 @@ const ColorSelector = () => {
                         placement="bottom"
                         options={[
                             {
-                                label: 'Import Theme',
+                                label: '导入主题',
                                 icon: 'download',
                                 onPress: (m) => {
                                     pickJSONDocument().then((result) => {
-                                        if (!result.success) return
-                                        addCustomColor(result.data)
-                                    })
-                                    m?.current?.close()
+                                        if (!result.success) return;
+                                        addCustomColor(result.data);
+                                    });
+                                    m?.current?.close();
                                 },
                             },
                         ]}
@@ -166,7 +166,7 @@ const ColorSelector = () => {
                 )}
             />
         </View>
-    )
-}
+    );
+};
 
-export default ColorSelector
+export default ColorSelector;
