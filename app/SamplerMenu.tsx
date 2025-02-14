@@ -61,28 +61,28 @@ const SamplerMenu = () => {
             `${currentConfig.name}.json`,
             'utf8'
         ).then(() => {
-            Logger.infoToast('Downloaded Sampler Configuration!')
+            Logger.infoToast('采样器配置已下载！')
         })
     }
 
     const handleImportSampler = () => {
         //TODO : Implement
-        Logger.errorToast('Importing Not Implemented')
+        Logger.errorToast('导入功能尚未实现')
     }
 
     const handleDeleteSampler = () => {
         if (configList.length === 1) {
-            Logger.errorToast(`Cannot Delete Last Configuration`)
+            Logger.errorToast(`无法删除最后一个配置`)
             return false
         }
 
         Alert.alert({
-            title: `Delete Sampler`,
-            description: `Are you sure you want to delete '${currentConfig.name}'?`,
+            title: `删除采样器`,
+            description: `您确定要删除 '${currentConfig.name}' 吗？`,
             buttons: [
-                { label: 'Cancel' },
+                { label: '取消' },
                 {
-                    label: 'Delete Sampler',
+                    label: '删除采样器',
                     onPress: async () => {
                         deleteSamplerConfig(currentConfigIndex)
                     },
@@ -100,7 +100,7 @@ const SamplerMenu = () => {
             placement="bottom"
             options={[
                 {
-                    label: 'Create Sampler',
+                    label: '创建采样器',
                     icon: 'addfile',
                     onPress: (menu) => {
                         setShowNewSampler(true)
@@ -108,7 +108,7 @@ const SamplerMenu = () => {
                     },
                 },
                 {
-                    label: 'Export Sampler',
+                    label: '导出采样器',
                     icon: 'download',
                     onPress: (menu) => {
                         handleExportSampler()
@@ -116,7 +116,7 @@ const SamplerMenu = () => {
                     },
                 },
                 /*{
-                    label: 'Import Sampler',
+                    label: '导入采样器',
                     icon: 'upload',
                     onPress: (menu) => {
                         handleImportSampler()
@@ -124,7 +124,7 @@ const SamplerMenu = () => {
                     },
                 },*/
                 {
-                    label: 'Delete Sampler',
+                    label: '删除采样器',
                     icon: 'delete',
                     onPress: (menu) => {
                         if (handleDeleteSampler()) menu.current?.close()
@@ -141,20 +141,20 @@ const SamplerMenu = () => {
                 booleans={[showNewSampler, setShowNewSampler]}
                 onConfirm={(text: string) => {
                     if (text === '') {
-                        Logger.errorToast(`Sampler name cannot be empty`)
+                        Logger.errorToast(`采样器名称不能为空`)
                         return
                     }
 
                     for (const item of configList)
                         if (item.name === text) {
-                            Logger.errorToast(`Sampler name already exists.`)
+                            Logger.errorToast(`采样器名称已存在。`)
                             return
                         }
                     addSamplerConfig({ name: text, data: currentConfig.data })
                 }}
             />
 
-            <HeaderTitle title="Samplers" />
+            <HeaderTitle title="采样器" />
             <HeaderButton headerRight={headerRight} />
 
             <DropdownSheet
@@ -175,7 +175,7 @@ const SamplerMenu = () => {
                         if (!samplerItem)
                             return (
                                 <Text style={styles.unsupported}>
-                                    Sampler ID {`[${item.samplerID}]`} Not Supported
+                                    不支持的采样器 ID [${item.samplerID}]
                                 </Text>
                             )
                         switch (samplerItem.inputType) {
@@ -242,7 +242,7 @@ const SamplerMenu = () => {
                             //case 'custom':
                             default:
                                 return (
-                                    <Text style={styles.warningText}>Invalid Sampler Field!</Text>
+                                    <Text style={styles.warningText}>无效的采样器字段！</Text>
                                 )
                         }
                     })}
