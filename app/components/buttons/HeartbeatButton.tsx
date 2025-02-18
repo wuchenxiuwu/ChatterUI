@@ -1,8 +1,7 @@
-import { Theme } from '@lib/theme/ThemeManager'
-import React, { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
-
-import ThemedButton from './ThemedButton'
+import { Theme } from '@lib/theme/ThemeManager';
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
+import ThemedButton from './ThemedButton';
 
 const enum ResponseStatus {
     DEFAULT,
@@ -11,93 +10,92 @@ const enum ResponseStatus {
 }
 
 type HeartbeatButtonProps = {
-    api: string
-    buttonText?: string
-    apiFormat?: (url: string) => string
-    callback?: () => void
-    messageNeutral?: string
-    messageError?: string
-    messageOK?: string
-    headers?: any
-}
+    api: string;
+    buttonText?: string;
+    apiFormat?: (url: string) => string;
+    callback?: () => void;
+    messageNeutral?: string;
+    messageError?: string;
+    messageOK?: string;
+    headers?: any;
+};
 
 const HeartbeatButton: React.FC<HeartbeatButtonProps> = ({
     api,
-    buttonText = 'Test',
+    buttonText = 'Test / 测试', // 合并：英文 / 中文
     apiFormat = (url: string) => {
         try {
-            const newurl = new URL('v1/models', api)
-            return newurl.toString()
+            const newurl = new URL('v1/models', api);
+            return newurl.toString();
         } catch (e) {
-            return ''
+            return '';
         }
     },
-    messageNeutral = 'Not Connected',
-    messageError = 'Failed To Connect',
-    messageOK = 'Connected',
+    messageNeutral = 'Not Connected / 未连接', // 合并：英文 / 中文
+    messageError = 'Failed To Connect / 连接失败', // 合并：英文 / 中文
+    messageOK = 'Connected / 已连接', // 合并：英文 / 中文
     headers = {},
     callback = () => {},
 }) => {
-    const { color, spacing } = Theme.useTheme()
-    const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.DEFAULT)
+    const { color, spacing } = Theme.useTheme();
+    const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.DEFAULT);
 
     useEffect(() => {
-        handleCheck()
-    }, [])
+        handleCheck();
+    }, []);
 
     const StatusMessage = () => {
         switch (status) {
             case ResponseStatus.DEFAULT:
-                return messageNeutral
+                return messageNeutral;
             case ResponseStatus.ERROR:
-                return messageError
+                return messageError;
             case ResponseStatus.OK:
-                return messageOK
+                return messageOK;
         }
-    }
+    };
 
     const handleCheck = async () => {
-        const endpoint = apiFormat(api)
+        const endpoint = apiFormat(api);
         try {
-            const controller = new AbortController()
+            const controller = new AbortController();
             const timeout = setTimeout(() => {
-                controller.abort()
-            }, 1000)
+                controller.abort();
+            }, 1000);
             const response = await fetch(endpoint, {
                 method: 'GET',
                 signal: controller.signal,
                 headers: headers ?? {},
-            }).catch(() => ({ status: 400 }))
-            clearTimeout(timeout)
-            callback()
-            setStatus(response.status === 200 ? ResponseStatus.OK : ResponseStatus.ERROR)
+            }).catch(() => ({ status: 400 }));
+            clearTimeout(timeout);
+            callback();
+            setStatus(response.status === 200 ? ResponseStatus.OK : ResponseStatus.ERROR);
         } catch (error) {
-            setStatus(ResponseStatus.ERROR)
+            setStatus(ResponseStatus.ERROR);
         }
-    }
+    };
 
     const getButtonColor = () => {
         switch (status) {
             case ResponseStatus.DEFAULT:
-                return color.neutral._200
+                return color.neutral._200;
             case ResponseStatus.ERROR:
-                return color.error._400
+                return color.error._400;
             case ResponseStatus.OK:
-                return color.primary._500
+                return color.primary._500;
         }
-    }
+    };
 
-    const buttonColor = getButtonColor()
+    const buttonColor = getButtonColor();
 
     return (
         <View style={{ flexDirection: 'row', marginTop: 8 }}>
-            <ThemedButton label="Test" onPress={handleCheck} variant="secondary" />
+            <ThemedButton label={buttonText} onPress={handleCheck} variant="secondary" />
             <View
                 style={{
                     marginLeft: 4,
                     backgroundColor: buttonColor,
-                    borderColor:
-                        status === ResponseStatus.DEFAULT ? color.neutral._100 : buttonColor,
+                    borderColor: status === ResponseStatus.DEFAULT ? color.neutral._100 : buttonColor,
                     padding: 8,
                     minWidth: 160,
                     alignItems: 'center',
@@ -105,15 +103,10 @@ const HeartbeatButton: React.FC<HeartbeatButtonProps> = ({
                     borderWidth: 1,
                     borderRadius: 8,
                 }}>
-                <Text
-                    style={{
-                        color: color.text._100,
-                    }}>
-                    {StatusMessage()}
-                </Text>
+                <Text style={{ color: color.text._100 }}>{StatusMessage()}</Text>
             </View>
         </View>
-    )
-}
+    );
+};
 
-export default HeartbeatButton
+export default HeartbeatButton;
